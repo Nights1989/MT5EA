@@ -1,0 +1,331 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, #0a0f1e 0%, #0c1222 100%);
+    color: #eef5ff;
+    font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, sans-serif;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.card {
+    background: rgba(20, 30, 55, 0.6);
+    backdrop-filter: blur(8px);
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    transition: all 0.2s;
+}
+
+.card:hover {
+    border-color: #3b82f6;
+}
+
+.card h2, .card h3 {
+    color: #00ffcc;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.card h2 {
+    font-size: 1.6rem;
+    border-left: 4px solid #00ffcc;
+    padding-left: 16px;
+}
+
+.btn {
+    background: #3b82f6;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 40px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(59, 130, 246, 0.3);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid #3b82f6;
+    color: #3b82f6;
+}
+
+.btn-outline:hover {
+    background: #3b82f6;
+    color: white;
+}
+
+.btn-small {
+    padding: 4px 12px;
+    font-size: 0.8rem;
+}
+
+.btn-danger {
+    background: #dc2626;
+}
+
+.btn-danger:hover {
+    background: #b91c1c;
+}
+
+input, select, textarea {
+    background: #1e2a3a;
+    border: 1px solid #3b82f6;
+    border-radius: 12px;
+    padding: 8px 14px;
+    color: white;
+    font-size: 0.9rem;
+    outline: none;
+    transition: 0.2s;
+}
+
+input:focus, select:focus {
+    border-color: #00ffcc;
+    box-shadow: 0 0 5px rgba(0,255,204,0.3);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+}
+
+th, td {
+    padding: 12px 8px;
+    text-align: left;
+    border-bottom: 1px solid #2d3a5e;
+}
+
+th {
+    color: #00ffcc;
+    font-weight: 500;
+}
+
+tr:hover {
+    background: rgba(59,130,246,0.1);
+}
+
+.badge-online {
+    background: #10b981;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+}
+
+.badge-offline {
+    background: #6b7280;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+}
+
+.badge-warning {
+    background: #f59e0b;
+    color: black;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.error {
+    color: #f87171;
+    font-size: 0.85rem;
+    margin-top: 8px;
+}
+
+.success {
+    color: #00ffcc;
+}
+
+.hidden {
+    display: none;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.mb-4 {
+    margin-bottom: 16px;
+}
+
+/* ========== 公共页面专用样式 ========== */
+.public-page {
+    min-height: 100vh;
+    position: relative;
+}
+.public-page .hero-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    background-size: cover;
+    background-position: center;
+    transition: background-image 0.8s ease-in-out;
+}
+.public-page .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 30%, rgba(0,20,40,0.7), rgba(0,0,0,0.85));
+    z-index: -1;
+}
+.public-page .content {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.public-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(100,180,250,0.2);
+    margin-bottom: 40px;
+}
+.public-nav .logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #aaffff, #3b82f6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+.public-nav .nav-links {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.public-nav .nav-links a {
+    color: #cbd5e6;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.2s;
+}
+.public-nav .nav-links a:hover {
+    color: #60a5fa;
+}
+.public-nav .btn-outline {
+    border: 1px solid #3b82f6;
+    background: transparent;
+    padding: 6px 20px;
+    border-radius: 40px;
+    color: #3b82f6;
+}
+.public-nav .btn-outline:hover {
+    background: #3b82f6;
+    color: white;
+}
+.public-footer {
+    margin-top: 60px;
+    padding: 30px 0;
+    border-top: 1px solid rgba(100,150,220,0.2);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+    font-size: 0.85rem;
+    color: #8a9ac0;
+}
+.public-footer .footer-links {
+    display: flex;
+    gap: 28px;
+}
+.public-footer .footer-links a {
+    color: #8a9ac0;
+    text-decoration: none;
+}
+.public-footer .footer-links a:hover {
+    color: #60a5fa;
+}
+.public-card {
+    background: rgba(20,30,55,0.6);
+    backdrop-filter: blur(8px);
+    border-radius: 28px;
+    padding: 28px 32px;
+    border: 1px solid rgba(59,130,246,0.3);
+    margin-bottom: 30px;
+}
+.public-card h1 {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    color: #00ffcc;
+}
+.public-card h2 {
+    font-size: 1.6rem;
+    margin: 20px 0 10px;
+    color: #60a5fa;
+}
+.public-card p, .public-card li {
+    line-height: 1.8;
+    color: #d0d8f0;
+}
+.public-card a {
+    color: #00ffcc;
+}
+@media (max-width: 720px) {
+    .public-nav { flex-direction: column; gap: 15px; }
+    .public-nav .nav-links { justify-content: center; }
+    .public-card { padding: 20px; }
+    .public-card h1 { font-size: 1.8rem; }
+}
+
+/* ========== 管理后台 Tab 样式 ========== */
+.tab-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.tab {
+    padding: 8px 16px;
+    cursor: pointer;
+    background: #2a2a3a;
+    border-radius: 8px;
+    transition: 0.2s;
+    font-weight: 500;
+}
+.tab.active {
+    background: #00ffcc;
+    color: #1e1e2f;
+}

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>北极星 EA | 全品种智能量化平台</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        /* 主页额外样式 */
+        .video-news-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 40px 0;
+        }
+        .video-container {
+            background: #000;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .video-container video {
+            width: 100%;
+            display: block;
+            outline: none;
+        }
+        .news-container {
+            background: rgba(20,30,55,0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 24px;
+            padding: 20px;
+            border: 1px solid rgba(59,130,246,0.3);
+        }
+        .news-container h3 {
+            color: #00ffcc;
+            margin-bottom: 16px;
+            font-size: 1.4rem;
+        }
+        .news-list {
+            list-style: none;
+            padding: 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .news-list li {
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(100,150,220,0.2);
+            padding-bottom: 12px;
+        }
+        .news-list li a {
+            color: #eef5ff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+            display: block;
+        }
+        .news-list li a:hover {
+            color: #60a5fa;
+            transform: translateX(4px);
+        }
+        .news-date {
+            font-size: 0.75rem;
+            color: #8a9ac0;
+            margin-top: 6px;
+        }
+        /* 行情模块 */
+        .market-ticker {
+            margin: 40px 0 20px;
+            background: rgba(20,30,55,0.5);
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            padding: 20px;
+            border: 1px solid rgba(59,130,246,0.3);
+        }
+        .market-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+        .market-header h3 {
+            color: #00ffcc;
+            font-size: 1.4rem;
+            margin: 0;
+        }
+        .update-time {
+            font-size: 0.75rem;
+            color: #8a9ac0;
+        }
+        .market-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .market-table th, .market-table td {
+            padding: 12px 8px;
+            text-align: left;
+            border-bottom: 1px solid #2d3a5e;
+        }
+        .market-table th {
+            color: #00ffcc;
+            font-weight: 500;
+        }
+        .market-table tr:hover {
+            background: rgba(59,130,246,0.1);
+        }
+        .positive {
+            color: #00ff9d;
+        }
+        .negative {
+            color: #ff4d4d;
+        }
+        @media (max-width: 800px) {
+            .video-news-section {
+                grid-template-columns: 1fr;
+            }
+            .market-table th, .market-table td {
+                font-size: 0.8rem;
+                padding: 8px 4px;
+            }
+        }
+    </style>
+</head>
+<body class="public-page">
+<div class="hero-bg"></div>
+<div class="overlay"></div>
+<div class="content">
+    <nav class="public-nav">
+        <div class="logo">✦ POLARIS</div>
+        <div class="nav-links">
+            <a href="/index.html" style="color:#60a5fa;">首页</a>
+            <a href="/product.html">产品</a>
+            <a href="/about.html">关于我们</a>
+            <a href="/contact.html">联系</a>
+            <a href="/login.html" class="btn-outline">登录</a>
+            <a href="/login.html?register=1" class="btn-outline" style="background:#3b82f6;color:white;">注册</a>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <div class="public-card" style="text-align:center;">
+        <h1>北极星 · 智能量化交易平台</h1>
+        <p style="font-size:1.2rem;">全品种覆盖 · 多策略自适应 · 云端AI风控 · 移动远程操控</p>
+        <div style="margin: 30px 0;">
+            <a href="/login.html" class="btn" style="margin-right:15px;">开始使用</a>
+            <a href="/product.html" class="btn btn-outline">了解详情</a>
+        </div>
+    </div>
+
+    <!-- 实时行情模块（仅加密货币） -->
+    <div class="market-ticker">
+        <div class="market-header">
+            <h3>📊 加密货币实时行情</h3>
+            <span class="update-time" id="marketUpdateTime"></span>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="market-table" id="marketTable">
+                <thead>
+                    <tr>
+                        <th>品种</th><th>最新价</th><th>涨跌幅</th><th>今日最高</th><th>今日最低</th>
+                    </tr>
+                </thead>
+                <tbody id="marketTbody">
+                    <tr><td colspan="5">加载中...</td</tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 视频 + 新闻区域 -->
+    <div class="video-news-section">
+        <div class="video-container">
+            <video controls width="100%" poster="/bj.jpg" autoplay loop muted>
+                <source src="/polaris_intro.mp4" type="video/mp4">
+                您的浏览器不支持视频播放。
+            </video>
+        </div>
+        <div class="news-container">
+            <h3>📰 行业新闻</h3>
+            <div id="newsList" class="news-list">
+                <div style="text-align:center; padding:30px;">加载中...</div>
+            </div>
+            <div style="margin-top:20px; text-align:right;">
+                <a href="https://www.jin10.com" target="_blank" style="color:#60a5fa; font-size:0.8rem;">更多新闻 →</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 产品特性卡片（宣传版） -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 24px;">
+        <div class="public-card">
+            <h3>📈 全品种 · 多策略</h3>
+            <p>支持MT5任何交易品种（外汇、黄金、原油、加密货币等），内置多套自适应策略模型，根据市场状态自动匹配最优参数，告别单一策略的死板。</p>
+        </div>
+        <div class="public-card">
+            <h3>🛡️ 5级基础风控 + 云端AI</h3>
+            <p>趋势、时段、仓位、被套、基础——五层立体风控层层递进；云端AI引擎7x24小时分析EA运行状态，异常波动智能熔断，避免单边爆仓。</p>
+        </div>
+        <div class="public-card">
+            <h3>📡 远程实时监控</h3>
+            <p>无需登录MT5，通过网页端实时查看所有在线MT5账户的持仓、净值、授权剩余天数。EA运行状态一目了然，异常告警实时推送。</p>
+        </div>
+        <div class="public-card">
+            <h3>⚡ 远程指令 · 移动操控</h3>
+            <p>无论身在何处，通过网页或手机即可对任意绑定的MT5账户发送暂停开仓、全平、恢复交易等指令。极端行情秒级响应，资金安全尽在掌控。</p>
+        </div>
+    </div>
+
+    <footer class="public-footer">
+        <div>© 2025 北极星 Polaris | 专业量化策略</div>
+        <div class="footer-links">
+            <a href="/terms.html">服务条款</a>
+            <a href="/privacy.html">隐私政策</a>
+            <a href="/disclaimer.html">免责声明</a>
+            <a href="/contact.html">联系我们</a>
+        </div>
+    </footer>
+</div>
+
+<script>
+    // ---------- 行情数据（仅加密货币，使用 CoinGecko）----------
+    const cryptoInstruments = [
+        { id: 'bitcoin', name: '比特币', symbol: 'BTC' },
+        { id: 'ethereum', name: '以太坊', symbol: 'ETH' },
+        { id: 'solana', name: 'Solana', symbol: 'SOL' },
+        { id: 'ripple', name: '瑞波币', symbol: 'XRP' },
+        { id: 'dogecoin', name: '狗狗币', symbol: 'DOGE' }
+    ];
+
+    async function fetchCryptoPrices() {
+        const ids = cryptoInstruments.map(i => i.id).join(',');
+        const url = `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true&include_24hr_high=true&include_24hr_low=true`;
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+            return data;
+        } catch (err) {
+            console.error('获取加密货币数据失败:', err);
+            return null;
+        }
+    }
+
+    async function loadMarketData() {
+        const tbody = document.getElementById('marketTbody');
+        tbody.innerHTML = '<tr><td colspan="5">加载行情中...</td</tr>';
+        
+        const cryptoData = await fetchCryptoPrices();
+        if (!cryptoData) {
+            tbody.innerHTML = '<tr><td colspan="5">行情数据暂不可用</td</tr>';
+            return;
+        }
+
+        let rowsHtml = '';
+        for (const inst of cryptoInstruments) {
+            const d = cryptoData[inst.id];
+            if (!d) {
+                rowsHtml += `<tr><td><strong>${inst.name}</strong> (${inst.symbol})</td><td colspan="4">--</td></tr>`;
+                continue;
+            }
+            const price = d.usd ? d.usd.toFixed(2) : '--';
+            const change = d.usd_24h_change ? d.usd_24h_change.toFixed(2) : '--';
+            const high = (d.usd_24h_high !== undefined && d.usd_24h_high !== null) ? d.usd_24h_high.toFixed(2) : '--';
+            const low  = (d.usd_24h_low  !== undefined && d.usd_24h_low  !== null) ? d.usd_24h_low.toFixed(2)  : '--';
+            const changeClass = (d.usd_24h_change && d.usd_24h_change > 0) ? 'positive' : (d.usd_24h_change && d.usd_24h_change < 0) ? 'negative' : '';
+            const changeSign = (change !== '--' && parseFloat(change) > 0) ? '+' : '';
+            rowsHtml += `
+                <tr>
+                    <td><strong>${inst.name}</strong> (${inst.symbol})</td>
+                    <td>$${price}</td>
+                    <td class="${changeClass}">${changeSign}${change}%</td>
+                    <td>$${high}</td>
+                    <td>$${low}</td>
+                </tr>
+            `;
+        }
+        tbody.innerHTML = rowsHtml;
+        const timeSpan = document.getElementById('marketUpdateTime');
+        if (timeSpan) {
+            const now = new Date();
+            timeSpan.innerText = `更新于 ${now.toLocaleTimeString('zh-CN')}`;
+        }
+    }
+
+    loadMarketData();
+    setInterval(loadMarketData, 60000);
+
+    // ---------- 中文新闻聚合（使用 RSSHub 公共实例，如果完全不可用可替换为静态提示）----------
+    const newsSources = [
+        { name: '华尔街见闻', url: 'https://rsshub.app/wallstreetcn/latest' },
+        { name: '汇通网', url: 'https://www.fx678.com/news/fxnews/rss' },
+        { name: '金十数据（代理）', url: 'https://rsshub.app/jin10/latest' }
+    ];
+
+    async function fetchRSS(url) {
+        const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`;
+        try {
+            const res = await fetch(proxyUrl);
+            const data = await res.json();
+            if (data.status === 'ok') return data.items;
+            return [];
+        } catch (err) {
+            console.warn(`RSS 获取失败: ${url}`, err);
+            return [];
+        }
+    }
+
+    async function loadAllNews() {
+        const container = document.getElementById('newsList');
+        if (!container) return;
+        container.innerHTML = '<div style="text-align:center; padding:30px;">聚合新闻中...</div>';
+        
+        const results = await Promise.all(newsSources.map(s => fetchRSS(s.url)));
+        let allItems = [];
+        for (let i = 0; i < results.length; i++) {
+            const items = results[i];
+            items.forEach(item => {
+                allItems.push({
+                    title: item.title,
+                    link: item.link,
+                    pubDate: new Date(item.pubDate),
+                    source: newsSources[i].name
+                });
+            });
+        }
+        const unique = new Map();
+        allItems.forEach(item => {
+            const key = item.title.slice(0, 50);
+            if (!unique.has(key)) unique.set(key, item);
+        });
+        let uniqueItems = Array.from(unique.values());
+        uniqueItems.sort((a,b) => b.pubDate - a.pubDate);
+        const latestNews = uniqueItems.slice(0, 15);
+        
+        if (latestNews.length === 0) {
+            container.innerHTML = '<div style="text-align:center; padding:30px;">暂无新闻，请稍后刷新</div>';
+            return;
+        }
+        
+        container.innerHTML = '';
+        latestNews.forEach(news => {
+            const li = document.createElement('li');
+            const dateStr = news.pubDate.toLocaleDateString('zh-CN');
+            li.innerHTML = `
+                <a href="${news.link}" target="_blank" rel="noopener noreferrer">${news.title}</a>
+                <div class="news-date">${dateStr} · ${news.source}</div>
+            `;
+            container.appendChild(li);
+        });
+    }
+    
+    loadAllNews();
+    setInterval(loadAllNews, 3600000);
+</script>
+<script src="/bg-slideshow.js"></script>
+</body>
+</html>

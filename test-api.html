@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API 测试工具</title>
+    <meta charset="UTF-8">
+    <style>
+        body { background: #0a0f1e; color: #eee; font-family: monospace; padding: 20px; }
+        pre { background: #1e2a3a; padding: 10px; border-radius: 8px; overflow-x: auto; }
+        button { background: #3b82f6; border: none; padding: 8px 16px; border-radius: 6px; color: white; cursor: pointer; margin-top: 10px; }
+        input, textarea { width: 100%; margin-bottom: 10px; background: #1e2a3a; border: 1px solid #3b82f6; color: white; padding: 8px; }
+    </style>
+</head>
+<body>
+    <h2>北极星 API 测试工具</h2>
+    <div>
+        <p>当前 localStorage 中的 token:</p>
+        <pre id="tokenDisplay"></pre>
+        <button id="refreshToken">刷新/获取token</button>
+    </div>
+    <hr>
+    <h3>测试添加用户</h3>
+    <div>
+        <input type="text" id="testUsername" placeholder="用户名" value="testuser123">
+        <input type="text" id="testNickname" placeholder="昵称" value="测试用户">
+        <input type="email" id="testEmail" placeholder="邮箱" value="test@example.com">
+        <input type="password" id="testPassword" placeholder="密码" value="123456">
+        <select id="testRole">
+            <option value="user">普通用户</option>
+            <option value="agent">代理商</option>
+        </select>
+        <button id="testAddUser">添加用户</button>
+    </div>
+    <div>
+        <h3>响应结果:</h3>
+        <pre id="result">等待操作...</pre>
+    </div>
+
+    <script>
+        const API_BASE = 'https://polaris-backend.catalinanapelon755.workers.dev';
+        const tokenDisplay = document.getElementById('tokenDisplay');
+        const refreshBtn = document.getElementById('refreshToken');
+        const addBtn = document.getElementById('testAddUser');
+        const resultDiv = document.getElementById('result');
+
+        function getToken() {
+            return localStorage.getItem('token');
+        }
+
+        function updateTokenDisplay() {
+            const token = getToken();
+            tokenDisplay.innerText = token ? token.substring(0, 50) + '...' : '未登录或无 token';
+        }
+
+        refreshBtn.addEventListener('click', () => {
+            updateTokenDisplay();
+        });
+
+        addBtn.addEventListener('click', async () => {
+            const token = getToken();
+            if (!token) {
+                resultDiv.innerText = '错误: 未找到 token，请先登录管理后台，再访问此页面。';
+                return;
+            }
+            const username = document.getElementById('testUsername').value.trim();
+            const nickname = document.getElementById('testNickname').value.trim();
+            const email = document.getElementById('testEmail').value.trim();
+            const password = document.getElementById('testPassword').value;
+            const role = document.getElementById('testRole').value;
+
+            if (!username || !nickname || !email || !password) {
+                resultDiv.innerText = '请填写完整信息';
+                return;
+            }
+
+            resultDiv.innerText = '发送请求中...';
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/user`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ username, nickname, email, password, role })
+                });
+                const data = await res.json();
+                resultDiv.innerText = JSON.stringify(data, null, 2);
+            } catch (err) {
+                resultDiv.innerText = `请求失败: ${err.message}`;
+            }
+        });
+
+        updateTokenDisplay();
+    </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>北极星管理系统</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="hero-bg"></div>
+<div class="overlay"></div>
+<div class="container">
+    <div class="card" style="padding: 16px 24px;">
+        <div class="flex-between">
+            <div>
+                <strong>在线: </strong><span id="onlineCount">0</span> / <span id="totalCount">0</span>
+                <button class="btn btn-small" id="refreshBtn" style="margin-left:12px;">刷新</button>
+            </div>
+            <div>
+                欢迎, <strong id="userName"></strong> (<span id="userRole"></span>)
+                星币: <strong id="userStars">0</strong> 累计: <strong id="userTotalStars">0</strong>
+                <button class="btn btn-small btn-outline" id="logoutBtn" style="margin-left:16px;">退出</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-bar" id="mainTabBar">
+        <div class="tab active" data-page="clients">客户端监控</div>
+        <div class="tab hidden" id="adminUsersTab" data-page="users">用户管理</div>
+        <div class="tab" data-page="profile">个人信息</div>
+        <div class="tab" data-page="download">📥 下载</div>
+        <div class="tab" data-page="changelog">📋 更新日志</div>
+        <div class="tab" data-page="logs">操作日志</div>
+    </div>
+
+    <div id="pageContainer">
+        <div class="card" style="text-align:center;">加载中...</div>
+    </div>
+</div>
+
+<script src="/common.js"></script>
+<script>
+    let currentUser = null;
+    let currentPage = 'clients';
+
+    window.onload = async () => {
+        try {
+            currentUser = await fetchCurrentUser();
+            document.getElementById('userName').innerText = currentUser.nickname || currentUser.username;
+            document.getElementById('userRole').innerText = getRoleText(currentUser.role);
+            document.getElementById('userStars').innerText = currentUser.stars_balance;
+            document.getElementById('userTotalStars').innerText = currentUser.total_stars_charged;
+
+            const isSuperOrAgent = (currentUser.role === 'super_admin' || currentUser.role === 'agent');
+            document.getElementById('adminUsersTab').classList.toggle('hidden', !isSuperOrAgent);
+
+            loadPage('clients');
+            bindEvents();
+        } catch(e) {
+            console.error(e);
+            window.location.href = '/login.html';
+        }
+    };
+
+    async function loadPage(pageName) {
+        currentPage = pageName;
+        const container = document.getElementById('pageContainer');
+        container.innerHTML = '<div class="card" style="text-align:center;">加载中...</div>';
+        try {
+            const response = await fetch(`/pages/${pageName}.html`);
+            if (!response.ok) throw new Error('页面不存在');
+            const html = await response.text();
+            container.innerHTML = html;
+            setTimeout(() => {
+                if (window.initPage) window.initPage(currentUser);
+            }, 50);
+        } catch(err) {
+            container.innerHTML = `<div class="card"><p class="error">页面加载失败: ${err.message}</p></div>`;
+        }
+    }
+
+    function bindEvents() {
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+        document.getElementById('refreshBtn').addEventListener('click', async () => {
+            await updateStarsDisplay();
+            if (currentPage === 'clients' && window.loadClients) window.loadClients();
+            if (currentPage === 'users' && window.loadUsersList) window.loadUsersList();
+            if (currentPage === 'logs' && window.loadLogs) window.loadLogs();
+        });
+
+        const tabs = document.querySelectorAll('#mainTabBar .tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const page = tab.dataset.page;
+                if (!page) return;
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                loadPage(page);
+            });
+        });
+    }
+
+    window.refreshStars = async () => {
+        await updateStarsDisplay();
+    };
+</script>
+<script src="/bg-slideshow.js"></script>
+</body>
+</html>
